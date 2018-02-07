@@ -2,28 +2,15 @@
 
 var model = {
   init: function() {
-    var jsonPath = './data.json';
-    var request = new XMLHttpRequest();
-    request.open('GET', jsonPath);
-    request.responseType = 'json';
-    request.send();
 
-    request.onload = function() {
-      var superHeroes = request.response;
+    // create a request object with data, request.response to see data
+    window.request = new XMLHttpRequest();
+    let requestURL = 'https://raw.githubusercontent.com/ZwiFTi/flashcards_2018/master/js/data.json';
+    window.request.open('GET', requestURL);
 
-
-
-      var myH1 = document.createElement('h1');
-      myH1.textContent = superHeroes['question'];
-      header.appendChild(myH1);
-    }
-
-
-
-
-
-  }
-
+    window.request.responseType = 'json';
+    window.request.send();
+  },
 }
 
 
@@ -33,6 +20,34 @@ let octopus = {
   init: function() {
     model.init();
     view.init();
+  },
+
+  // Takes an array and shuffles it
+  shuffle: function(array) {
+    let currentIndex = array.length, temporaryValue, randomIndex;
+
+    while (currentIndex !== 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+    return array;
+  },
+
+  getCutDeck: function(array, lengthInNumber) {
+    array.forEach(function() {
+      if (array.length > 10) {
+        array.pop();
+      }
+    })
+
+    return array;
+  },
+
+  getRandomQuestions: function() {
+    return octopus.shuffle(request.response);
   }
 }
 
